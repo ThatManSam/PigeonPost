@@ -1,0 +1,20 @@
+#mapBackButton{
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    z-index: 999;  
+    border: none;
+    width: 200px;
+    height: 40px;
+    border-radius: 10px;
+    background-color: #16161D;
+    color: white;
+    font-size: larger;
+    font-weight: 600;
+    cursor: pointer;
+  }
+#mapContainer{
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}

@@ -1,0 +1,54 @@
+/* Navbar.css */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    margin: 0 1rem;
+}
+#capitalP{
+    display: inline-block;
+    width: 30px;
+    height: 25px;
+    padding-top: 3px;
+    background-color: #16161D;
+    color: white;
+    text-align: center;
+    font-weight: 700;
+    font-size: large;
+}
+#capitalP:active{
+    text-decoration: none;
+}
+#navBarTitle a{
+    color: #59595e;
+    font-weight: 900;
+}
+#navBarAbout{
+    color: #59595e;
+    border-bottom: 1px solid #59595e;
+    font-weight: 500;
+}
+#navBarAbout:hover{
+    color: #16161D;
+}
+#navBarViewMapButton{
+    background-color: #16161D;
+    border: none;
+    color: white;
+    padding: 10px;
+    border-radius: 7px;
+    width: 120px;
+    margin-left: 30px;
+    font-weight: 700;
+    cursor: pointer;
+}
+#navBarViewMapButton:hover{
+    color: #16161D;
+    background-color: rgb(103, 103, 103);
+}
