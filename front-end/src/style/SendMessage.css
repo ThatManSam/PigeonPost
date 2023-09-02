@@ -1,0 +1,158 @@
+#SendMessageBox{
+    padding: 20px;
+}
+#SendMessageContainer{
+    padding: 30px;
+}
+#ChooseYourBird{
+    text-align: center;
+}
+#ChooseYourBird h1{
+    font-size: 60px;
+}
+#birdHeadshot img{
+    width: 150px;
+    margin: 0px;
+    padding: 0px;
+}
+#birdHeadshot{
+    border-radius: 10px;
+    background-color: white;
+    margin: 0px;
+    padding: 10px;
+    width: fit-content;
+    margin: auto;
+    box-shadow: 2px 2px 2px 2px #ccc;  /* Adding box shadow */
+    cursor: pointer;
+}
+#birdHeadshot:hover{
+    box-shadow: 2px 2px 6px 6px #ccc;  /* Adding box shadow */
+}
+#birdStats{
+    background-color: rgb(213, 211, 211);
+    font-size: smaller;
+    width: 170px;
+    box-shadow: 2px 2px 4px 5px #ccc;  /* Adding box shadow */
+
+}
+#birdStats div{
+    padding-bottom: 10px;
+    font-weight: 500;
+}
+#Performance{
+    background-color: #1D1B26;
+    color: white;
+    padding-top: 10px;
+    font-weight: 700;
+}
+#speedStat{
+    padding-top: 10px;
+}
+#birdName{
+    padding: 10px;
+    font-weight: 700;
+}
+
+#HasChosenBird{
+    border: none;
+    background-color: #1D1B26;
+    color: white;
+    width: 200px;
+    height: 60px;
+    font-size: 25px;
+    border-radius: 10px;
+    margin-top: 100px;
+    font-weight: 700;
+}
+
+#HasChosenBird:hover{
+    background-color: grey;
+    color: #1D1B26;
+}
+#HasChosenBird:disabled {
+    background-color: grey;
+    cursor: not-allowed;
+}
+#backToInbox{
+    border: none;
+    background-color: transparent;
+    color: #1D1B26;
+    width: 140px;
+    height: 60px;
+    font-size: 25px;
+    border-radius: 10px;
+    margin-top: 100px;
+    font-weight: 700;
+    margin-right: 20px;
+}
+#backToInbox:hover{
+    background-color: grey;
+}
+  
+#birdBox{
+    width: 90%;
+    margin: auto;
+    max-width: 1400px;
+}
+#estDeliveryWithSelectedBird{
+    font-weight: 700;
+}
+#writeMessageDiv{
+    text-align: center;
+}
+#writeMessageDiv h1{
+    font-size: 60px;
+}
+#enterReceiverEmail{
+    width: 600px;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    display: block;
+    margin: auto;
+    font-size: larger;
+}
+#enterMessage{
+    margin-top: 30px;
+    border-radius: 10px;
+    border: none;
+    width: 70%;
+    height: 400px;
+    padding: 10px;
+    font-size: larger;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+}
+#infoAndSendDiv{
+    text-align: right;
+    width: 70%;
+    margin: auto;
+    margin-top: 20px;
+}
+#sendTheMessage{
+    border: none;
+    width: 200px;
+    height: 40px;
+    border-radius: 10px;
+    background-color: #1D1B26;
+    color: white;
+    font-size: larger;
+    font-weight: 600;
+    margin-left: 10px;
+    cursor: pointer;
+}
+#backToSelectBirds{
+    border: none;
+    width: 140px;
+    height: 40px;
+    border-radius: 10px;
+    background-color: transparent;
+    color: #1D1B26;
+    font-size: larger;
+    font-weight: 600;
+    margin-left: 20px;
+    cursor: pointer;
+}
+#infoAndSendDiv button:hover{
+    background-color: grey;
+    color: #1D1B26;
+}

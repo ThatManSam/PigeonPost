@@ -1,0 +1,96 @@
+#mainComponantBox {
+    padding: 20px;
+}
+#mainComponantContainer{
+    padding: 1rem;
+    padding-left: 30px;
+}
+#mainComponantContainer h1{
+    font-size: 60px;
+}
+#mainComponentButtons button{
+    display: block;
+    width: 200px;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    margin-top: 10px;
+    font-size: larger;
+    font-weight: 600;
+    cursor: pointer;
+}
+#mainComponentNewButton{
+    background-color: rgb(178, 177, 177);
+    color: #16161D;
+    margin-bottom: 50px;
+    height: 70px;
+}
+#mainComponentNewButton:hover{
+    background-color: rgb(124, 122, 122);
+}
+#mainComponentNewButton img{
+    width: 20px;
+    padding-right: 20px;
+}
+#mainComponentInboxButton:hover{
+    background-color: #16161D;
+    color: white;
+}
+#mainComponentSentButton:hover{
+    background-color: #16161D;
+    color: white;
+}
+.selectedButton {
+    background-color: #16161D;
+    color: white;
+}
+  
+#inboxDiv {
+  display: flex;
+  align-items: flex-start; 
+}
+#mainComponentDisplay{
+    flex: 1; 
+    text-align: center;
+}
+.receivedMail{
+    background-color: rgb(235, 235, 235);
+    width: 80%;
+    margin: auto;
+    padding: 5px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    height: 30px;
+    align-items: center;
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    align-items: center;
+  
+}
+.receivedMail:hover{
+    background-color: rgb(248, 247, 247);
+}
+.senderName{
+    font-weight: 700;
+    padding-left: 50px;
+    width: 100px;
+}
+.receivedMail{
+    flex: 1;
+}
+#inboxSentTitle{
+    font-size: 27px;
+    font-weight: 700;
+    padding-bottom: 30px;
+}
+.receivedMail .senderMessage:last-child {
+    text-align: right;
+  }
+.senderDate{
+    padding-right: 10px;
+    font-weight: 500;
+    text-align: right;
+}
+#userName{
+    color: #970E17;
+}
