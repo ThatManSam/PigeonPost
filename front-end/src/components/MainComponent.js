@@ -3,7 +3,7 @@ import NavBar from './NavBar';
 import '../style/MainComponent.css';
 import New from '../Images/edit.png'
 
-function MainComponent({ onSendToggle, onShowMap }) {
+function MainComponent({ onSendToggle, onShowMap,user }) {
 
   const [inboxSent, setInboxSent] = useState("Inbox")
   const inbox = [["Lenny", "My Pigeon is superior to yours","25 Aug"],
@@ -20,7 +20,7 @@ function MainComponent({ onSendToggle, onShowMap }) {
       <NavBar onShowMap={onShowMap}/>
       <div id='mainComponantContainer'>
         <div>
-          <h1>Welcome, <span id='userName'>user</span></h1>
+          <h1>Welcome, <span id='userName'>{user.signInUserSession.idToken.payload.email}</span></h1>
         </div>
         <div id='inboxDiv'>
           <div id='mainComponentButtons'>
