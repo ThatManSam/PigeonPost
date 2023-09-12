@@ -2,7 +2,6 @@ import LandingPage from './components/LandingPage'
 import MainComponent from './components/MainComponent';
 import SendMessage from './components/SendMessage'
 import Map from './components/Map'
-import Login from './components/TestLogin'
 import { Amplify, Auth } from 'aws-amplify';
 import React, { useEffect, useState } from 'react';
 import '@aws-amplify/ui-react/styles.css';
@@ -30,7 +29,6 @@ Amplify.configure({
 const currentConfig = Auth.configure();
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isSendVisible, setIsSentVisible] = useState(false)
   const [isMapVisible, setIsMapVisible] = useState(false);
 
@@ -62,17 +60,12 @@ function App() {
     Amplify.configure(currentConfig);
     Auth.federatedSignIn({ provider: 'Google' });
   };
-
-  const handleLoginSuccess = () => {
-    setIsLoggedIn(true);
-  };
   const toggleMapVisibility = () => {
     setIsMapVisible(!isMapVisible);
   };
 
   return (
     <div className="App">
-
       {isMapVisible ? (
         <Map onCloseMap={toggleMapVisibility} />
       ) : user ? (
@@ -92,9 +85,7 @@ function App() {
         <LandingPage onLoginSuccess={signInWithGoogle} onShowMap={toggleMapVisibility} />
       )}
     </div>
-    // <Login/>
-    );
+  );  
 }
 
 export default App;
-  

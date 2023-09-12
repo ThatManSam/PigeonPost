@@ -49,8 +49,7 @@ function MainComponent({ onSendToggle, onShowMap,user }) {
             </div>
           </div>
         </div>
-
-        </div>
+      </div>
     </div>
   );
 }
