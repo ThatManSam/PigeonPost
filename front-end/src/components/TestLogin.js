@@ -1,9 +1,5 @@
-import LandingPage from './components/LandingPage'
-import MainComponent from './components/MainComponent';
-import SendMessage from './components/SendMessage'
-import Map from './components/Map'
 import { Amplify, Auth } from 'aws-amplify';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import '@aws-amplify/ui-react/styles.css';
 
 Amplify.configure({
@@ -29,9 +25,6 @@ Amplify.configure({
 const currentConfig = Auth.configure();
 
 function App() {
-  const [isSendVisible, setIsSentVisible] = useState(false)
-  const [isMapVisible, setIsMapVisible] = useState(false);
-
   const [user, setUser] = useState(null)
 
   const signOut = () => {
@@ -60,32 +53,17 @@ function App() {
     Amplify.configure(currentConfig);
     Auth.federatedSignIn({ provider: 'Google' });
   };
-  const toggleMapVisibility = () => {
-    setIsMapVisible(!isMapVisible);
-  };
 
   return (
-    <div className="App">
-      {isMapVisible ? (
-        <Map onCloseMap={toggleMapVisibility} />
-      ) : user ? (
-        isSendVisible ? (
-          <SendMessage 
-            onSendToggle={() => setIsSentVisible(!isSendVisible)} 
-            onShowMap={toggleMapVisibility} 
-          />
-        ) : (
-          <MainComponent 
-            onSendToggle={() => setIsSentVisible(!isSendVisible)} 
-            onShowMap={toggleMapVisibility} 
-            user={user}
-          />
-        )
+    <>
+      <h1>Hello {user ? user.signInUserSession.idToken.payload.email : 'Guest'}</h1>
+      {user ? (
+        <button onClick={signOut}>Sign out</button>
       ) : (
-        <LandingPage onLoginSuccess={signInWithGoogle} onShowMap={toggleMapVisibility} />
+        <button onClick={signInWithGoogle}>Sign in with Google</button>
       )}
-    </div>
-  );  
+    </>
+  );
 }
 
 export default App;
