@@ -16,7 +16,7 @@ def generate_message_id(sender_name, receiver_name, sent_date):
 
 def lambda_handler(event, context):
     try:
-        body = event['body']
+        body = json.loads(event['body'])
         senderName = body['senderName']
         receiverName = body['receiverName']
         sentDate = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S')
@@ -42,6 +42,5 @@ def lambda_handler(event, context):
     except Exception as e:
         return {
             'statusCode': 500,
-            'body': json.dumps(str(e)),
-            'cause': type(e).__name__
+            'body': json.dumps(str(e))
         }
