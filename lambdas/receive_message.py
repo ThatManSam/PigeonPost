@@ -6,7 +6,7 @@ from datetime import datetime
 
 # Initialize DynamoDB client
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('messages')
+table = dynamodb.Table('message')
 
 def generate_message_id(sender_name, receiver_name, sent_date):
     # Generate ID from senderName, receiverName, sentDate, and a random number as a string

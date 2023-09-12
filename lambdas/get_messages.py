@@ -3,7 +3,7 @@ import boto3
 
 # Initialize DynamoDB client
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('messages')
+table = dynamodb.Table('message')
 
 def lambda_handler(event, context):
     try:
