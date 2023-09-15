@@ -57,6 +57,15 @@ function MainComponent({ onSendToggle, onShowMap,user }) {
                   <span className='senderDate'>{message[2]}</span>
                 </div>
               ))}
+              <h1>Sent Messages</h1>
+                {inboxMessages.received_messages.map((msg, index) => (
+                  <div key={index}>
+                    <p>{msg.message}</p>
+                    <p>{msg.sentDate}</p>
+                  </div>
+                ))}
+
+
             </div>
           </div>
         </div>
