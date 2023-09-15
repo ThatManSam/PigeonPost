@@ -26,6 +26,23 @@ function MainComponent({ onSendToggle, onShowMap,user }) {
       console.log("working")
   }, []);
 
+  function formatDate(dateStr) {
+    const dateObj = new Date(dateStr);
+    const day = dateObj.getDate();
+    const month = dateObj.toLocaleString('default', { month: 'short' }); // Gets the abbreviated month name
+  
+    let suffix = 'th';
+    if (day === 1 || day === 21 || day === 31) {
+      suffix = 'st';
+    } else if (day === 2 || day === 22) {
+      suffix = 'nd';
+    } else if (day === 3 || day === 23) {
+      suffix = 'rd';
+    }
+  
+    return `${day}${suffix} ${month}`;
+  }
+  
   return (
     <div id='mainComponantBox'>
       <NavBar onShowMap={onShowMap}/>
@@ -50,22 +67,13 @@ function MainComponent({ onSendToggle, onShowMap,user }) {
           <div id='mainComponentDisplay'>
             <div id='inboxSentTitle'>{inboxSent}</div>
             <div>
-              {messages.map((message, index) => (
+              {inboxMessages.received_messages.map((msg, index) => (
                 <div key={index} className='receivedMail'>
-                  <span className='senderName'>{message[0]}</span>
-                  <span className='senderMessage'>{message[1]}</span>
-                  <span className='senderDate'>{message[2]}</span>
+                  <span className='senderName'>{msg.senderName}</span>
+                  <span className='senderMessage'>{msg.message}</span>
+                  <span className='senderDate'>{formatDate(msg.sentDate)}</span>
                 </div>
               ))}
-              <h1>Sent Messages</h1>
-                {inboxMessages.received_messages.map((msg, index) => (
-                  <div key={index}>
-                    <p>{msg.message}</p>
-                    <p>{msg.sentDate}</p>
-                  </div>
-                ))}
-
-
             </div>
           </div>
         </div>
