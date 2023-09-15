@@ -65,7 +65,6 @@
     display: grid;
     grid-template-columns: auto auto 1fr;
     align-items: center;
-  
 }
 .receivedMail:hover{
     background-color: rgb(248, 247, 247);
@@ -73,7 +72,7 @@
 .senderName{
     font-weight: 700;
     padding-left: 50px;
-    width: 100px;
+    width: 200px;
 }
 .receivedMail{
     flex: 1;
