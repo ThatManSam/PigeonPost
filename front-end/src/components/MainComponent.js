@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import NavBar from './NavBar';
 import '../style/MainComponent.css';
 import New from '../Images/edit.png'
@@ -14,6 +14,17 @@ function MainComponent({ onSendToggle, onShowMap,user }) {
   ["John", "Wanna Have a pigeon off","Delivered: 25 Aug, 2024"],]
 
   const messages = inboxSent === 'Inbox' ? inbox : sent;
+
+  const [inboxMessages, setInboxMessages] = useState({ sent_messages: [], received_messages: [] });
+
+  useEffect(() => {
+    fetch('https://otk78wgmid.execute-api.ap-southeast-2.amazonaws.com/develop/api/message?user=John+Doe')
+      .then(response => response.json())
+      .then(data => setInboxMessages(data))
+      .catch(error => console.error('Error fetching data:', error));
+
+    console.log(inboxMessages.received_messages)
+  }, []);
 
   return (
     <div id='mainComponantBox'>

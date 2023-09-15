@@ -16,6 +16,8 @@ Amplify.configure({
       scope: ['email', 'openid', 'phone'],
       redirectSignIn: 'https://pigeonpost.site/',
       redirectSignOut: 'https://pigeonpost.site/',
+      // redirectSignIn: 'http://localhost:3001',
+      // redirectSignOut: 'http://localhost:3001',
       responseType: 'code', // or 'code'
       options: {
         AdvancedSecurityDataCollectionFlag: false
