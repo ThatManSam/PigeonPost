@@ -21,9 +21,9 @@ function MainComponent({ onSendToggle, onShowMap,user }) {
     fetch('https://otk78wgmid.execute-api.ap-southeast-2.amazonaws.com/develop/api/message?user=John+Doe')
       .then(response => response.json())
       .then(data => setInboxMessages(data))
+      .then(console.log(inboxMessages.received_messages))
       .catch(error => console.error('Error fetching data:', error));
-
-    console.log(inboxMessages.received_messages)
+      console.log("working")
   }, []);
 
   return (
