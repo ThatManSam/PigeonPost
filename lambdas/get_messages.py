@@ -3,7 +3,7 @@ import boto3
 
 # Initialize DynamoDB client
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('messages')
+table = dynamodb.Table('message')
 
 def lambda_handler(event, context):
     try:
@@ -19,18 +19,15 @@ def lambda_handler(event, context):
             }
         )
 
-        # # Query messages sent to the receiverName
-        # received_messages_response = table.query(
-        #     IndexName='ReceiverNameIndex',  # Assuming you have an index on receiverName
-        #     KeyConditionExpression='receiverName = :receiver',
-        #     ExpressionAttributeValues={
-        #         ':receiver': name
-        #     }
-        # )
-        received_messages_response = {
-            'Items': []
-        }
-
+        # Query messages sent to the receiverName
+        received_messages_response = table.query(
+            IndexName='receiverName-index',  # Assuming you have an index on receiverName
+            KeyConditionExpression='receiverName = :receiver',
+            ExpressionAttributeValues={
+                ':receiver': name
+            }
+        )
+        
         sent_messages = sent_messages_response.get('Items', [])
         received_messages = received_messages_response.get('Items', [])
 
