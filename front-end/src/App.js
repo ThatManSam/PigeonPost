@@ -14,8 +14,8 @@ Amplify.configure({
     oauth: {
       domain: 'pigeonpost-signin.auth.ap-southeast-2.amazoncognito.com',
       scope: ['email', 'openid', 'phone'],
-      redirectSignIn: 'http://localhost:3001/',
-      redirectSignOut: 'http://localhost:3001/',
+      redirectSignIn: 'https://pigeonpost.site/',
+      redirectSignOut: 'https://pigeonpost.site/',
       responseType: 'code', // or 'code'
       options: {
         AdvancedSecurityDataCollectionFlag: false
