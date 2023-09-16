@@ -8,22 +8,10 @@ import Pigeon from '../Images/landingPagePigeon.png'
 const mapStyle = {
   width: '500px',
   height: '300px',
-  position: 'absolute'
+  position: 'absolute',
 };
 
-// const generateRandomPoints = (numPoints) => {
-//   var latlngs = [];
-//   for (var i = 0; i < 4; i++) {
-//     var lat = -43 + (Math.random() - 0.5) * 20;
-//     var lng = 172 + (Math.random() - 0.5) * 20;
-//     latlngs.push([lat, lng]);
-//   }
-//   return latlngs;
-// };
-
-// const randomPoints = generateRandomPoints(100);
-
-const MapComponent = ({ onCloseMap }) => {
+const MapComponent = ({ message }) => {
   const [currentPosition, setCurrentPosition] = useState(null);
   const [points, setPoints] = useState([[0, 0]]);
 
@@ -35,13 +23,17 @@ const MapComponent = ({ onCloseMap }) => {
     popupAnchor: [0, -41]  // point from which the popup should open relative to the iconAnchor
   });
 
+  // useEffect(() => {
+  //   console.log("Message prop has changed:", message);
+  // }, [message]);
+  
   useEffect(() => {
     fetch('https://otk78wgmid.execute-api.ap-southeast-2.amazonaws.com/develop/api/message/81ff659df2e15226bffe29a517e20cc951d98b47cb342b1f183da0493d33901c/location')
     .then(response => response.json())
     .then(data => {
       const transformedPoints = data.map(point => [point.latitude, point.longitude]);
       setPoints(transformedPoints);
-        console.log('Success:', data);
+        // console.log('Success:', data);
     })
     .catch((error) => {
       console.error('Error:', error);
@@ -55,7 +47,7 @@ const MapComponent = ({ onCloseMap }) => {
   }, [points]);
   
   const drawPoints = () => {
-    const startTime = new Date('2023-09-16T10:00:12').getTime();
+    const startTime = new Date(message.sentDate).getTime();
     const arrivalTime = new Date('2023-09-16T10:30:12').getTime();
     const currentTime = new Date().getTime();
   

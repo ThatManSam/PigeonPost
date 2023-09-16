@@ -7,25 +7,26 @@ import Map from '../components/Map'
 function MainComponent({ onSendToggle, onShowMap,user }) {
 
   const [inboxSent, setInboxSent] = useState("Inbox")
-  // const inbox = [["Lenny", "My Pigeon is superior to yours","25 Aug"],
-  // ["John", "My Pigeon is superior to yours","25 Aug"],
-  // ["Carmen", "My Pigeon is superior to yours","25 Aug"],]
-  
-  // const sent = [["Lenny", "Wanna Have a pigeon off","Est. Delivery: 25 Aug, 2024"],
-  // ["John", "Wanna Have a pigeon off","Delivered: 25 Aug, 2024"],]
-
-  // const messages = inboxSent === 'Inbox' ? inbox : sent;
-
   const [inboxMessages, setInboxMessages] = useState({ sent_messages: [], received_messages: [] });
   const [selectedMessageId, setSelectedMessageId] = useState(null);
+  const [showMapModal, setShowMapModal] = useState(false);
+  const [selectedSentMessage, setSelectedSentMessage] = useState(null)
 
+  const closeModal = () => {
+    setShowMapModal(false);
+    setSelectedMessageId(null);
+  };
+
+  const messageClick = (messageID) => {
+    setSelectedSentMessage(inboxMessages.sent_messages.find(msg => msg.message_id === messageID));
+    setShowMapModal(true);
+  }
+  
   useEffect(() => {
     fetch('https://otk78wgmid.execute-api.ap-southeast-2.amazonaws.com/develop/api/message?user=John+Doe')
       .then(response => response.json())
       .then(data => setInboxMessages(data))
-      .then(console.log(inboxMessages.received_messages))
       .catch(error => console.error('Error fetching data:', error));
-      console.log("working")
   }, []);
 
   function formatDate(dateStr) {
@@ -66,6 +67,17 @@ function MainComponent({ onSendToggle, onShowMap,user }) {
               Sent
             </button>
           </div>
+          <div>
+            {showMapModal && (
+              <div className="modal">
+                <div className="modal-content">
+                  <div className="close-button" onClick={closeModal}>close</div>
+                  <Map message={selectedSentMessage} />
+                </div>
+              </div>
+            )}
+          </div>
+
           <div id='mainComponentDisplay'>
             <div id='inboxSentTitle'>{inboxSent}</div>
             <div>
@@ -73,13 +85,13 @@ function MainComponent({ onSendToggle, onShowMap,user }) {
                 // Display sent messages
                 inboxMessages.sent_messages.map((msg, index) => (
                   <>
-                  <div key={msg.message_id} className='receivedMail' onClick={() => setSelectedMessageId(msg.message_id)}>
+                  <div key={msg.message_id} className='receivedMail' onClick={() => { 
+                    messageClick(msg.message_id)
+                    }}>
                     <span className='senderName'>{msg.receiverName}</span>
                     <span className='senderMessage'>{msg.message}</span>
                     <span className='senderDate'>{formatDate(msg.sentDate)}</span>
                   </div>
-                  {selectedMessageId === msg.message_id && <Map message_id={selectedMessageId} />}
-
                   </>
                 ))
               ) : (
