@@ -5,6 +5,7 @@ import Map from './components/Map'
 import { Amplify, Auth } from 'aws-amplify';
 import React, { useEffect, useState } from 'react';
 import '@aws-amplify/ui-react/styles.css';
+import ChooseLocation from './components/chooseLocation';
 
 Amplify.configure({
   Auth: {
@@ -14,8 +15,10 @@ Amplify.configure({
     oauth: {
       domain: 'pigeonpost-signin.auth.ap-southeast-2.amazoncognito.com',
       scope: ['email', 'openid', 'phone'],
-      redirectSignIn: 'http://localhost:3001/',
-      redirectSignOut: 'http://localhost:3001/',
+      redirectSignIn: 'https://pigeonpost.site/',
+      redirectSignOut: 'https://pigeonpost.site/',
+      // redirectSignIn: 'http://localhost:3001',
+      // redirectSignOut: 'http://localhost:3001',
       responseType: 'code', // or 'code'
       options: {
         AdvancedSecurityDataCollectionFlag: false
@@ -31,6 +34,7 @@ const currentConfig = Auth.configure();
 function App() {
   const [isSendVisible, setIsSentVisible] = useState(false)
   const [isMapVisible, setIsMapVisible] = useState(false);
+  const [userHasSignedUp, setUserHasSignedUp] = useState(false); // New state variable
 
   const [user, setUser] = useState(null)
 
@@ -43,7 +47,21 @@ function App() {
         console.log("Error signing out: ", err);
       });
   };
+  useEffect(() => {
+    if (user) {
+      // Run fetch request when user is logged in
+      // fetch('YOUR_API_ENDPOINT')
+      //   .then(response => response.json())
+      //   .then(data => {
+      //     setUserHasSignedUp(data); // Assume data is a boolean (true or false)
+      //   })
+      //   .catch(error => {
+      //     console.error('Error fetching data:', error);
+      //   });
+    }
+  }, [user]);
 
+  // checks if user is logged in 
   useEffect(() => {
     Auth.currentAuthenticatedUser()
       .then(user => {
@@ -55,7 +73,9 @@ function App() {
         console.log("No user signed in");
       });
   }, []); 
-
+  const userSignedUp= () => {
+    setUserHasSignedUp(true)
+  }
   const signInWithGoogle = () => {
     Amplify.configure(currentConfig);
     Auth.federatedSignIn({ provider: 'Google' });
@@ -67,14 +87,21 @@ function App() {
   return (
     <div className="App">
       {isMapVisible ? (
+        // this is being removed
         <Map onCloseMap={toggleMapVisibility} />
       ) : user ? (
-        isSendVisible ? (
+        userHasSignedUp === false ? (
+          // Show another component if fetchResult is false
+          <ChooseLocation onSignUpOK={userSignedUp}/>
+        ) : isSendVisible ? (
+          // User is sending messgae
           <SendMessage 
             onSendToggle={() => setIsSentVisible(!isSendVisible)} 
             onShowMap={toggleMapVisibility} 
+            user={user}
           />
         ) : (
+          // this is the 'home' screen
           <MainComponent 
             onSendToggle={() => setIsSentVisible(!isSendVisible)} 
             onShowMap={toggleMapVisibility} 
