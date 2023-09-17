@@ -1,0 +1,10 @@
+---
+# Change these to suit your environment
+blog_root_dir: /Users/tommorcom/Documents/UOW/4th-Year/COMPX527/COMPx527
+bucket_name: compx527-tm250-blog-test.live
+other_buckets:
+  - tommorcom-test1
+  - tommorco-test2
+  - tommorc-test3
+  - tommor-test5
+  - thommor-test6
