@@ -71,6 +71,7 @@ const ChooseLocation = ({ onSignUpOK }) => {
       <div className="modalSignUp-content">
         <h1>Sign Up</h1>
         <div>Click your location on the map</div>
+        <div>This is where all of your messages will be from</div>
         <div id="map">
           <MapContainer center={[0, 0]} zoom={1} style={mapStyle}>
             <TileLayer

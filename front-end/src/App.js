@@ -99,7 +99,6 @@ function App() {
           <SendMessage 
             onSendToggle={() => {
               setIsSentVisible(!isSendVisible)
-              window.alert("Message Sent!") 
             }} 
             onShowMap={toggleMapVisibility} 
             user={user}
