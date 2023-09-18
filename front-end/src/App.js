@@ -15,10 +15,10 @@ Amplify.configure({
     oauth: {
       domain: 'pigeonpost-signin.auth.ap-southeast-2.amazoncognito.com',
       scope: ['email', 'openid', 'phone'],
-      redirectSignIn: 'https://pigeonpost.site/',
-      redirectSignOut: 'https://pigeonpost.site/',
-      // redirectSignIn: 'http://localhost:3001',
-      // redirectSignOut: 'http://localhost:3001',
+      // redirectSignIn: 'https://pigeonpost.site/',
+      // redirectSignOut: 'https://pigeonpost.site/',
+      redirectSignIn: 'http://localhost:3001',
+      redirectSignOut: 'http://localhost:3001',
       responseType: 'code', // or 'code'
       options: {
         AdvancedSecurityDataCollectionFlag: false
@@ -86,7 +86,7 @@ function App() {
       .catch(err => {
         console.log("No user signed in");
       });
-  }, []); 
+  }, []);
   const userSignedUp= () => {
     setUserHasSignedUp(true)
   }

@@ -13,9 +13,9 @@ function SendMessage({ onSendToggle,onShowMap, user }) {
     const [message, setMessage] = useState('');
 
     const sendRequest = () => {
-      if(receiverName == "" || message == ""){
-        window.alert("Please enter a recipient and a message")
-        return
+      if (receiverName === "" || message === "") {
+        window.alert("Please enter a recipient and a message");
+        return;
       }
       fetch('https://otk78wgmid.execute-api.ap-southeast-2.amazonaws.com/develop/api/message', {
         method: 'POST',
@@ -28,13 +28,24 @@ function SendMessage({ onSendToggle,onShowMap, user }) {
           message: message
         })
       })
-      .then(response => response.json())
-      .then(data => console.log('Success:', data))
-      .catch((error) => console.error('Error:', error));
-      window.alert("Message Sent!") 
-      onSendToggle()
-    }
-    
+      .then(response => {
+        if (response.status === 400) {
+          window.alert('Bad request, could not send message.');
+          throw new Error('Bad request');  // This will skip the following 'then' and go straight to 'catch'
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Success:', data);
+        window.alert("Message Sent!");
+        onSendToggle();
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        // Note: If you throw an error in the above 'then', it will be caught here
+      });
+    };
+        
   return (
     <div id='SendMessageBox'>
         <NavBar onShowMap={onShowMap} />
