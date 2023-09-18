@@ -148,7 +148,7 @@ def lambda_handler(event, context):
         try:
             # Read the file from S3
             response = s3.get_object(Bucket=bucket_name, Key=object_key)
-            content = response['Body'].read().decode('utf-8')
+            content = response['Body'].read().decode('utf-8').splitlines()
         except Exception as e:
             print(f"Error reading file from S3: {str(e)}")
             return {

@@ -1,0 +1,16 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "sqs:DeleteMessage",
+                "sqs:GetQueueAttributes",
+                "sqs:ReceiveMessage"
+            ],
+            "Resource": [
+                "arn:aws:sqs:ap-southeast-2:149774945632:LocationCalculation.fifo"
+            ]
+        }
+    ]
+}
