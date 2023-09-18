@@ -42,7 +42,10 @@ def lambda_handler(event, context):
         message_id = event['pathParameters']['id']
 
         # Get the name to match against senderName or receiverName
-        name = get_user_from_jwt(event['headers']['authorization'])
+        if 'authorization' in event['headers'].keys():
+            name = get_user_from_jwt(event['headers']['authorization'])
+        else:
+            raise ValueError("Missing authorization header")
             
         # Check if a message with the given ID exists for the hardcoded name
         message_response = dynamodb_messages.query(

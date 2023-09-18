@@ -28,10 +28,16 @@ def lambda_handler(event, context):
     }
     
     try:
-        name = get_user_from_jwt(event['headers']['authorization'])
+        if 'authorization' in event['headers'].keys():
+            name = get_user_from_jwt(event['headers']['authorization'])
+        else:
+            raise ValueError("Missing authorization header")
         
         body = json.loads(event['body'])
-        location = body['location']
+        if 'location' in body.keys():
+            location = body['location']
+        else:
+            raise ValueError("Missing location in body")
         
         response = table.put_item(
             Item={

@@ -37,10 +37,49 @@ def lambda_handler(event, context):
     }
     
     try:
-        senderName = get_user_from_jwt(event['headers']['authorization'])
+        if 'authorization' in event['headers'].keys():
+            senderName = get_user_from_jwt(event['headers']['authorization'])
+        else:
+            raise ValueError("Missing authorization header")
         
         body = json.loads(event['body'])
-        receiverName = body['receiverName']
+        
+        if 'message' in body.keys():
+            message = body['message']
+        else:
+            raise ValueError("Missing key 'message' in body")
+        
+        if 'receiverName' in body.keys():
+            receiverName = body['receiverName']
+        else:
+            raise ValueError("Missing key 'receiverName' in body")
+        
+        # Get location of receiver and check they exist
+        receiver_user_response = table.query(
+            KeyConditionExpression='user_id = :user',
+            ExpressionAttributeValues={
+                ':user': senderName
+            }
+        )
+        receiver_user = receiver_user_response.get('Items', [])
+        if len(receiver_user) == 0:
+            return {
+                'statusCode': 400,
+                'headers': headers,
+                'body': json.dumps(f"Recipient does not exist")
+            }
+        receive_location = json.loads(receiver_user[0]['location'])
+        
+        # Query messages sent by the senderName
+        sender_user_response = table.query(
+            KeyConditionExpression='user_id = :user',
+            ExpressionAttributeValues={
+                ':user': senderName
+            }
+        )
+        sender_user = sender_user_response.get('Items', [])
+        send_location = json.loads(sender_user[0]['location'])
+        
         sentDate = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S')
         
         message_id = generate_message_id(senderName, receiverName, sentDate)
@@ -50,14 +89,8 @@ def lambda_handler(event, context):
         request = {
             "message_id": message_id,
             "sent_date": sentDate,
-            "send_location": {
-                "latitude": 37.7749,
-                "longitude": -122.4194
-            },
-            "receive_location": {
-                "latitude": 40.73061,
-                "longitude": -73.935242
-            }
+            "send_location": send_location,
+            "receive_location": receive_location
         }
 
         try:
@@ -81,8 +114,7 @@ def lambda_handler(event, context):
                 'receiverName': receiverName,
                 'sentDate': sentDate,
                 'arrivalDate': None,
-                'sentPigeon': body['sentPigeon'],
-                'message': body['message']
+                'message': message
             }
         )
         

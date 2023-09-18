@@ -30,9 +30,12 @@ def lambda_handler(event, context):
     
     
     try:
-        name = get_user_from_jwt(event['headers']['authorization'])
+        if 'authorization' in event['headers'].keys():
+            name = get_user_from_jwt(event['headers']['authorization'])
+        else:
+            raise ValueError("Missing authorization header")
         
-        # Query messages sent by the senderName
+        # Query messages sent by the user
         sent_messages_response = table.query(
             KeyConditionExpression='user_id = :user',
             ExpressionAttributeValues={
@@ -57,6 +60,5 @@ def lambda_handler(event, context):
         return {
             'statusCode': 500,
             'headers': headers,
-            # 'body': json.dumps(str(e))
-            'body': json.dumps(token_p)
+            'body': json.dumps(str(e))
         }
