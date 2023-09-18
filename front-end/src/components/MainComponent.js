@@ -24,7 +24,7 @@ function MainComponent({ onSendToggle, onShowMap,user, onSignOut }) {
   }
   
   useEffect(() => {
-    fetch('https://otk78wgmid.execute-api.ap-southeast-2.amazonaws.com/develop/api/message?user=John+Doe', {
+    fetch('https://otk78wgmid.execute-api.ap-southeast-2.amazonaws.com/develop/api/message', {
       headers: {
         'Authorization': user.signInUserSession.idToken.jwtToken  // This is the ID token from Cognito
       }
