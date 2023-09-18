@@ -6,8 +6,6 @@ servers:
     url: https://virtserver.swaggerhub.com/JOELDAMOLE0/PigeonPost/1.0.0
   - description: Development Server
     url: https://pigeon--post.web.app/
-  - description: AWS Develop staging API
-    url: https://otk78wgmid.execute-api.ap-southeast-2.amazonaws.com/develop
 info:
   version: "1.0.0"
   title: Pigeon Post Project API
@@ -136,6 +134,43 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorSchema'
+  /api/user:
+    get:
+      summary: Get the current user
+      tags:
+        - Logged In
+      security:
+        - session_cookie: []
+      responses:
+        '200':
+          description: User Exists
+        '400':
+          description: User Exists
+        '401':
+          description: NOT AUTHENTICATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+    post:
+      summary: Create a new user with their location
+      tags:
+        - Logged In
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/POSTUserSchema'
+      responses:
+        '201':
+          description: SUCCESS
+        '401':
+          description: NOT AUTHENTICATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
     POSTMessageSchema:
@@ -150,6 +185,14 @@ components:
         message:
           type: string
           example: "This is my message to Jane Smith"
+    POSTUserSchema:
+      type: object
+      properties:
+        userName:
+          type: string
+          example: jane.smith@gmail.com
+        location:
+          $ref: '#/components/schemas/LocationSchema'
     DBMessageSchema:
       type: object
       properties:
@@ -203,14 +246,16 @@ components:
     GETMessageLocationSchema:
       type: array
       items:
-        type: object
-        properties:
-          longitude:
-            type: number
-            example: -122.4194
-          latitude:
-            type: number
-            example: 37.7749
+        $ref: '#/components/schemas/LocationSchema'
+    LocationSchema:
+      type: object
+      properties:
+        longitude:
+          type: number
+          example: -122.4194
+        latitude:
+          type: number
+          example: 37.7749
     ErrorSchema:
       type: object
       properties:
