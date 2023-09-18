@@ -44,13 +44,13 @@ const ChooseLocation = ({ onSignUpOK }) => {
         return
     }
     console.log(payload)
-
     // UNCOMMENT WHEN API POINT IS THERE. 
     // try {
         //   const response = await fetch('setUserNameAndLocationAPI', {
     //     method: 'POST',
     //     headers: {
     //       'Content-Type': 'application/json',
+            //  'Authorization': user.signInUserSession.idToken.jwtToken,  // This is the ID token from Cognito
     //     },
     //     body: JSON.stringify(payload),
     //   });
