@@ -18,6 +18,10 @@ def convert_decimal_to_float(obj):
         return obj
 
 def lambda_handler(event, context):
+    headers = {
+        'Content-type': 'application/json'
+    }
+    
     try:
         # Extract the message ID from the URL path
         message_id = event['pathParameters']['id']
@@ -39,21 +43,6 @@ def lambda_handler(event, context):
             if message['senderName'] == hardcoded_name or message['receiverName'] == hardcoded_name:
                 match = True
                 break
-
-        headers = {
-            'Content-type': 'application/json'
-        }
-        
-        allowed_origins = [
-            "https://pigeonpost.site",
-            "http://localhost:3001",
-        ]
-        
-        if 'origin' in event['headers'].keys():
-            origin = event['headers']['origin']
-            if origin in allowed_origins:
-                headers['Access-Control-Allow-Origin'] = origin
-                headers['Access-Control-Allow-Credentials'] = 'true'
 
         # If a matching message is found
         if match:

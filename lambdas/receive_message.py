@@ -16,6 +16,10 @@ def generate_message_id(sender_name, receiver_name, sent_date):
     return hashlib.sha256(data_to_hash.encode()).hexdigest()
 
 def lambda_handler(event, context):
+    headers = {
+        'Content-type': 'application/json'
+    }
+    
     try:
         body = json.loads(event['body'])
         senderName = body['senderName']
@@ -64,22 +68,6 @@ def lambda_handler(event, context):
                 'message': body['message']
             }
         )
-        
-        headers = {
-            'Content-type': 'application/json'
-        }
-        
-        allowed_origins = [
-            "https://pigeonpost.site",
-            "http://localhost:3001",
-        ]
-        
-
-        if 'origin' in event['headers'].keys():
-            origin = event['headers']['origin']
-            if origin in allowed_origins:
-                headers['Access-Control-Allow-Origin'] = origin
-                headers['Access-Control-Allow-Credentials'] = 'true'
         
         return {
             'statusCode': 201,

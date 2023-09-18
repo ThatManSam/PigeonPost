@@ -6,6 +6,9 @@ dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('message')
 
 def lambda_handler(event, context):
+    headers = {
+        'Content-type': 'application/json'
+    }
     try:
         # Extract senderName and receiverName from the query parameters
         name = event['queryStringParameters']['user']
@@ -37,21 +40,6 @@ def lambda_handler(event, context):
             'received_messages': received_messages
         }
 
-        headers = {
-            'Content-type': 'application/json'
-        }
-        
-        allowed_origins = [
-            "https://pigeonpost.site",
-            "http://localhost:3001",
-        ]
-        
-        if 'origin' in event['headers'].keys():
-            origin = event['headers']['origin']
-            if origin in allowed_origins:
-                headers['Access-Control-Allow-Origin'] = origin
-                headers['Access-Control-Allow-Credentials'] = 'true'
-
         return {
             'statusCode': 200,
             'headers': headers,
@@ -60,5 +48,6 @@ def lambda_handler(event, context):
     except Exception as e:
         return {
             'statusCode': 500,
+            'headers': headers,
             'body': json.dumps(str(e))
         }
