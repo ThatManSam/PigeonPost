@@ -28,7 +28,7 @@ const MapComponent = ({ message, user }) => {
   // }, [message]);
   
   useEffect(() => {
-    console.log(message)
+    console.log(message.message_id)
     fetch(`https://otk78wgmid.execute-api.ap-southeast-2.amazonaws.com/develop/api/message/${message.message_id}/location`, {
       headers: {
         'Authorization': user.signInUserSession.idToken.jwtToken  // This is the ID token from Cognito
@@ -54,7 +54,7 @@ const MapComponent = ({ message, user }) => {
   
   const drawPoints = () => {
     const startTime = new Date(message.sentDate).getTime();
-    const arrivalTime = new Date('2023-09-16T10:30:12').getTime();
+    const arrivalTime = new Date(message.arrivalDate).getTime();
     const currentTime = new Date().getTime();
   
     const journeyDuration = arrivalTime - startTime;
