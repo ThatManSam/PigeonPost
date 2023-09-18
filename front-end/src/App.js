@@ -67,6 +67,7 @@ function App() {
       .then(user => {
         console.log("Logged in...")
         setUser(user);
+        console.log(user)
         console.log(user.signInUserSession.idToken.payload.email)
       })
       .catch(err => {
