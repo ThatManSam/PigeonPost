@@ -40,6 +40,21 @@ def lambda_handler(event, context):
                 match = True
                 break
 
+        headers = {
+            'Content-type': 'application/json'
+        }
+        
+        allowed_origins = [
+            "https://pigeonpost.site",
+            "http://localhost:3001",
+        ]
+        
+        if 'origin' in event['headers'].keys():
+            origin = event['headers']['origin']
+            if origin in allowed_origins:
+                headers['Access-Control-Allow-Origin'] = origin
+                headers['Access-Control-Allow-Credentials'] = 'true'
+
         # If a matching message is found
         if match:
             # Query the locations table directly using message_id
@@ -53,24 +68,28 @@ def lambda_handler(event, context):
             # Extract and return the matching locations
             matching_locations = locations_response.get('Items', [])
             matching_locations = convert_decimal_to_float(matching_locations)
-
+            
             if not matching_locations:
                 return {
                     'statusCode': 202,
+                    'headers': headers,
                     'body': json.dumps('Locations are still being calculated.')
                 }
 
             return {
                 'statusCode': 200,
+                'headers': headers,
                 'body': json.dumps(matching_locations[0]['locations'])
             }
         else:
             return {
                 'statusCode': 404,
+                'headers': headers,
                 'body': json.dumps('Message not found or unauthorized.')
             }
     except Exception as e:
         return {
             'statusCode': 500,
+            'headers': headers,
             'body': json.dumps(str(e))
         }

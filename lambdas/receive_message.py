@@ -24,10 +24,11 @@ def lambda_handler(event, context):
         
         message_id = generate_message_id(senderName, receiverName, sentDate)
         
-        sns_topic_arn = 'arn:aws:sqs:ap-southeast-2:149774945632:LocationCalculation.fifo'
+        sns_topic_arn = 'arn:aws:sns:ap-southeast-2:149774945632:location_calculation.fifo'
         message_group_id = "location_message_group"
         request = {
             "message_id": message_id,
+            "sent_date": sentDate,
             "send_location": {
                 "latitude": 37.7749,
                 "longitude": -122.4194
@@ -37,7 +38,7 @@ def lambda_handler(event, context):
                 "longitude": -73.935242
             }
         }
-                
+
         try:
             # Publish the message to the SNS topic
             sns.publish(
@@ -64,12 +65,30 @@ def lambda_handler(event, context):
             }
         )
         
+        headers = {
+            'Content-type': 'application/json'
+        }
+        
+        allowed_origins = [
+            "https://pigeonpost.site",
+            "http://localhost:3001",
+        ]
+        
+
+        if 'origin' in event['headers'].keys():
+            origin = event['headers']['origin']
+            if origin in allowed_origins:
+                headers['Access-Control-Allow-Origin'] = origin
+                headers['Access-Control-Allow-Credentials'] = 'true'
+        
         return {
-            'statusCode': 200,
+            'statusCode': 201,
+            'headers': headers,
             'body': json.dumps('SUCCESS')
         }
     except Exception as e:
         return {
             'statusCode': 500,
-            'body': json.dumps(str(e))
+            'body': json.dumps(str(e)),
+            'cause': type(e).__name__
         }

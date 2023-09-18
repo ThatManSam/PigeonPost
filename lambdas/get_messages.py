@@ -37,8 +37,24 @@ def lambda_handler(event, context):
             'received_messages': received_messages
         }
 
+        headers = {
+            'Content-type': 'application/json'
+        }
+        
+        allowed_origins = [
+            "https://pigeonpost.site",
+            "http://localhost:3001",
+        ]
+        
+        if 'origin' in event['headers'].keys():
+            origin = event['headers']['origin']
+            if origin in allowed_origins:
+                headers['Access-Control-Allow-Origin'] = origin
+                headers['Access-Control-Allow-Credentials'] = 'true'
+
         return {
             'statusCode': 200,
+            'headers': headers,
             'body': json.dumps(result)
         }
     except Exception as e:
