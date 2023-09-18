@@ -10,9 +10,9 @@ const Navbar = ({onShowMap}) => {
                 </div>
                 <a href="/">Pigeon Post</a>
             </div>
-            <div id='navBarRightSide'>
+            {/* <div id='navBarRightSide'>
                 <button onClick={onShowMap}id='navBarViewMapButton'>View Map</button>
-            </div>
+            </div> */}
         </div>
     );
 }

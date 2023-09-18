@@ -1,41 +1,41 @@
----
 openapi: 3.0.0
-info:
-  title: Pigeon Post Project API
-  description: This is the API spec for the Pigeon Post COMPX527 Project.
-  version: 1.0.0
 servers:
-- url: https://pigeon--post.web.app/
-  description: Development Server
+  # Added by API Auto Mocking Plugin
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/JOELDAMOLE0/PigeonPost/1.0.0
+  - description: Development Server
+    url: https://pigeon--post.web.app/
+  - description: AWS Develop staging API
+    url: https://otk78wgmid.execute-api.ap-southeast-2.amazonaws.com/develop
+info:
+  version: "1.0.0"
+  title: Pigeon Post Project API
+  description: >-
+    This is the API spec for the Pigeon Post COMPX527 Project.
 security:
-- session_cookie: []
+  - session_cookie: []
 paths:
   /:
     get:
       summary: Serves the UI of the application
       responses:
-        "200":
+        '200':
           description: OK
-        "404":
-          description: Resource not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorSchema'
-              example:
-                cause: availability
-                message: The resource was not found
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+          
   /login:
     post:
       summary: Logs in a user with a username and password
       responses:
-        "201":
+        '201':
           description: SUCCESS
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GETMessageListSchema'
-        "401":
+        '401':
           description: NOT AUTHENTICATED
           content:
             application/json:
@@ -43,38 +43,38 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
   /api/message:
     get:
-      tags:
-      - Logged In
       summary: Gets a list of all message for the current user
+      tags:
+        - Logged In
+      security:
+        - session_cookie: []
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GETMessageListSchema'
-        "401":
+        '401':
           description: NOT AUTHENTICATED
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorSchema'
-      security:
-      - session_cookie: []
     post:
-      tags:
-      - Logged In
       summary: Sends a message
+      tags:
+        - Logged In
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/POSTMessageSchema'
-        required: true
       responses:
-        "201":
+        '201':
           description: SUCCESS
-        "401":
+        '401':
           description: NOT AUTHENTICATED
           content:
             application/json:
@@ -82,65 +82,75 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
   /api/message/{id}:
     get:
-      tags:
-      - Logged In
       summary: Get Mail Entry by ID
+      tags:
+        - Logged In
       parameters:
-      - name: id
-        in: path
-        description: ID of the message to retrieve
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID of the message to retrieve
+      security:
+        - session_cookie: []
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GETMessageSchema'
-        "401":
+        '401':
           description: NOT AUTHENTICATED
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorSchema'
-      security:
-      - session_cookie: []
   /api/message/{id}/location:
     get:
-      tags:
-      - Logged In
       summary: Get Mail Entry by ID
+      tags:
+        - Logged In
       parameters:
-      - name: id
-        in: path
-        description: ID of the message to retrieve
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID of the message to retrieve
+      security:
+        - session_cookie: []
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GETMessageLocationSchema'
-        "401":
+        '202':
+          description: STILL PROCESSING
+        '401':
           description: NOT AUTHENTICATED
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorSchema'
-      security:
-      - session_cookie: []
 components:
   schemas:
     POSTMessageSchema:
+      type: object
+      properties:
+        receiverName:
+          type: string
+          example: Jane Smith
+        sentPigeon:
+          type: string
+          example: PigeonNameOrID
+        message:
+          type: string
+          example: "This is my message to Jane Smith"
+    DBMessageSchema:
       type: object
       properties:
         senderName:
@@ -152,12 +162,17 @@ components:
         sentDate:
           type: string
           format: date-time
+          example: "2023-08-29T21:10:08"
         arrivalDate:
           type: string
           format: date-time
+          example: "2023-09-15T21:10:08"
         sentPigeon:
           type: string
           example: PigeonNameOrID
+        message:
+          type: string
+          example: "This is my message to Jane Smith"
     GETMessageSchema:
       type: object
       properties:
@@ -169,11 +184,18 @@ components:
           example: John Doe
         message:
           type: string
-          example: "Hello, how are you?"
-        arriveOrSentDate:
+          example: Hello, how are you?
+        sentDate:
           type: string
-          format: date
-          example: 2023-08-29
+          format: date-time
+          example: "2023-08-29T21:10:08"
+        arrivalDate:
+          type: string
+          format: date-time
+          example: "2023-09-15T21:10:08"
+        locationListID:
+          type: number
+          example: 123456
     GETMessageListSchema:
       type: array
       items:
@@ -181,7 +203,14 @@ components:
     GETMessageLocationSchema:
       type: array
       items:
-        $ref: '#/components/schemas/GETMessageLocationSchema_inner'
+        type: object
+        properties:
+          longitude:
+            type: number
+            example: -122.4194
+          latitude:
+            type: number
+            example: 37.7749
     ErrorSchema:
       type: object
       properties:
@@ -191,35 +220,26 @@ components:
         message:
           type: string
           example: User not authenticated
-    GETMessageLocationSchema_inner:
-      type: object
-      properties:
-        longitude:
-          type: number
-          example: -122.4194
-        latitude:
-          type: number
-          example: 37.7749
   responses:
     NotFoundResponse:
       description: Resource not found
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ErrorSchema'
+            $ref: '#/components/schemas/ErrorSchema'  # Reference the common error schema
           example:
-            cause: availability
-            message: The resource was not found
+            cause: "availability"
+            message: "The resource was not found"
   securitySchemes:
     session_cookie:
       type: apiKey
-      name: session_cookie
       in: cookie
+      name: session_cookie
     password:
       type: oauth2
       flows:
         password:
-          tokenUrl: http://example.com/oauth/token
+          tokenUrl: 'http://example.com/oauth/token'
           scopes:
             write: allows modifying resources
             read: allows reading resources
