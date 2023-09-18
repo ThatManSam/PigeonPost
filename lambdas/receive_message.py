@@ -3,6 +3,7 @@ import boto3
 import hashlib
 import random
 from datetime import datetime
+import base64
 
 # Initialize DynamoDB client
 dynamodb = boto3.resource('dynamodb')
@@ -15,14 +16,30 @@ def generate_message_id(sender_name, receiver_name, sent_date):
     
     return hashlib.sha256(data_to_hash.encode()).hexdigest()
 
+def get_user_from_jwt(token):
+    try:
+        # Split the JWT into its parts (header, payload, signature)
+        _, payload_encoded, _ = token.split('.')
+
+        # Decode the base64-encoded header and payload
+        payload = json.loads(base64.urlsafe_b64decode(payload_encoded + '==').decode('utf-8'))
+
+        if 'email' in payload.keys():
+            return payload['email']
+        raise ValueError("Missing email in token")
+        
+    except Exception:
+        return None
+
 def lambda_handler(event, context):
     headers = {
         'Content-type': 'application/json'
     }
     
     try:
+        senderName = get_user_from_jwt(event['headers']['authorization'])
+        
         body = json.loads(event['body'])
-        senderName = body['senderName']
         receiverName = body['receiverName']
         sentDate = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S')
         

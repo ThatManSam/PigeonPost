@@ -1,7 +1,7 @@
 import json
 import boto3
 import decimal
-
+import base64
 
 # Initialize DynamoDB clients for both tables
 dynamodb_messages = boto3.resource('dynamodb').Table('message')
@@ -17,6 +17,21 @@ def convert_decimal_to_float(obj):
     else:
         return obj
 
+def get_user_from_jwt(token):
+    try:
+        # Split the JWT into its parts (header, payload, signature)
+        _, payload_encoded, _ = token.split('.')
+
+        # Decode the base64-encoded header and payload
+        payload = json.loads(base64.urlsafe_b64decode(payload_encoded + '==').decode('utf-8'))
+
+        if 'email' in payload.keys():
+            return payload['email']
+        raise ValueError("Missing email in token")
+        
+    except Exception:
+        return None
+
 def lambda_handler(event, context):
     headers = {
         'Content-type': 'application/json'
@@ -26,9 +41,9 @@ def lambda_handler(event, context):
         # Extract the message ID from the URL path
         message_id = event['pathParameters']['id']
 
-        # Define the hardcoded name to match against senderName or receiverName
-        hardcoded_name = "John Doe"  # Replace with your hardcoded name
-
+        # Get the name to match against senderName or receiverName
+        name = get_user_from_jwt(event['headers']['authorization'])
+            
         # Check if a message with the given ID exists for the hardcoded name
         message_response = dynamodb_messages.query(
             KeyConditionExpression='message_id = :mid',
@@ -40,7 +55,7 @@ def lambda_handler(event, context):
         messages = message_response.get('Items')
         match = False
         for message in messages:
-            if message['senderName'] == hardcoded_name or message['receiverName'] == hardcoded_name:
+            if message['senderName'] == name or message['receiverName'] == name:
                 match = True
                 break
 

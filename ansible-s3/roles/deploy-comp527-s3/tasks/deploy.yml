@@ -34,6 +34,10 @@
       zip_file: receive_message.zip
     - file: get_message_locations.py
       zip_file: get_message_locations.zip
+    - file: get_user.py
+      zip_file: get_user.zip
+    - file: create_user.py
+      zip_file: create_user.zip
     # - file: calculate_location_path.py
     #   zip_file: calculate_location_path.zip
   args:
@@ -52,12 +56,18 @@
     - name: get_messages
       role: LambdaGetMessages
       zip_file: "{{ role_path }}/../../../lambdas/get_messages.zip"
-    - name: receive_messages
+    - name: receive_message
       role: LambdaReceiveMessage
       zip_file: "{{ role_path }}/../../../lambdas/receive_message.zip"
     - name: get_message_locations
       role: LambdaGetLocations
       zip_file: "{{ role_path }}/../../../lambdas/get_message_locations.zip"
+    - name: get_user
+      role: LambdaGetUser
+      zip_file: "{{ role_path }}/../../../lambdas/get_user.zip"
+    - name: create_user
+      role: LambdaCreateUser
+      zip_file: "{{ role_path }}/../../../lambdas/create_user.zip"
     # - name: calculate_location_path
     #   role: LambdaCalculatePath
     #   zip_file: "{{ role_path }}/../../../lambdas/calculate_location_path.zip"
@@ -68,6 +78,8 @@
     - zip_file: get_messages.zip
     - zip_file: receive_message.zip
     - zip_file: get_message_locations.zip
+    - zip_file: get_user.zip
+    - zip_file: create_user.zip
     # - zip_file: calculate_location_path.zip
   args:
     chdir: "{{ role_path }}/../../../lambdas"

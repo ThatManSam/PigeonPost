@@ -4,7 +4,8 @@ import base64
 
 # Initialize DynamoDB client
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('message')
+table = dynamodb.Table('users')
+
 
 def get_user_from_jwt(token):
     try:
@@ -21,48 +22,41 @@ def get_user_from_jwt(token):
     except Exception:
         return None
 
+
 def lambda_handler(event, context):
     headers = {
         'Content-type': 'application/json'
     }
+    
+    
     try:
         name = get_user_from_jwt(event['headers']['authorization'])
         
         # Query messages sent by the senderName
         sent_messages_response = table.query(
-            IndexName='senderName-index',  # Assuming you have an index on senderName
-            KeyConditionExpression='senderName = :sender',
+            KeyConditionExpression='user_id = :user',
             ExpressionAttributeValues={
-                ':sender': name
+                ':user': name
             }
         )
 
-        # Query messages sent to the receiverName
-        received_messages_response = table.query(
-            IndexName='receiverName-index',  # Assuming you have an index on receiverName
-            KeyConditionExpression='receiverName = :receiver',
-            ExpressionAttributeValues={
-                ':receiver': name
-            }
-        )
-        
         sent_messages = sent_messages_response.get('Items', [])
-        received_messages = received_messages_response.get('Items', [])
-
-        # Combine and return the results
-        result = {
-            'sent_messages': sent_messages,
-            'received_messages': received_messages
-        }
-
-        return {
-            'statusCode': 200,
-            'headers': headers,
-            'body': json.dumps(result)
-        }
+        if len(sent_messages) > 0:
+            return {
+                'statusCode': 200,
+                'headers': headers,
+                'body': json.dumps("User exists")
+            }
+        else:
+            return {
+                'statusCode': 400,
+                'headers': headers,
+                'body': json.dumps("User does not exist")
+            }
     except Exception as e:
         return {
             'statusCode': 500,
             'headers': headers,
-            'body': json.dumps(str(e))
+            # 'body': json.dumps(str(e))
+            'body': json.dumps(token_p)
         }
