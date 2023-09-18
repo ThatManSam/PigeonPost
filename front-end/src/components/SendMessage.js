@@ -23,7 +23,7 @@ function SendMessage({ onSendToggle,onShowMap, user }) {
           'Authorization': user.signInUserSession.idToken.jwtToken  // This is the ID token from Cognito
         },
         body: JSON.stringify({
-          senderName: user.signInUserSession.idToken.payload.email,
+          // senderName: user.signInUserSession.idToken.payload.email,
           receiverName: receiverName,
           sentPigeon: "Pigeon123",
           message: message

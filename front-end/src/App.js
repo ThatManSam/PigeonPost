@@ -84,7 +84,7 @@ function App() {
   const toggleMapVisibility = () => {
     setIsMapVisible(!isMapVisible);
   };
-
+  
   return (
     <div className="App">
       {isMapVisible ? (
