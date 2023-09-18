@@ -23,8 +23,12 @@ function MainComponent({ onSendToggle, onShowMap,user }) {
   }
   
   useEffect(() => {
-    fetch('https://otk78wgmid.execute-api.ap-southeast-2.amazonaws.com/develop/api/message?user=John+Doe')
-      .then(response => response.json())
+    fetch('https://otk78wgmid.execute-api.ap-southeast-2.amazonaws.com/develop/api/message?user=John+Doe', {
+      headers: {
+        'Authorization': user.signInUserSession.idToken.jwtToken  // This is the ID token from Cognito
+      }
+    })
+      .then(response => console.log("response" + response.json()))
       .then(data => setInboxMessages(data))
       .catch(error => console.error('Error fetching data:', error));
   }, []);

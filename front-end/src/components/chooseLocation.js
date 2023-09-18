@@ -39,7 +39,7 @@ const ChooseLocation = ({ onSignUpOK }) => {
       userName,
       userLocation,
     };
-    if(userName == "" || userLocation == null){
+    if(userLocation == null){
         window.alert("Please Enter Name and Click Home Location On the Map")
         return
     }
@@ -70,12 +70,7 @@ const ChooseLocation = ({ onSignUpOK }) => {
     <div className="modalSignUp">
       <div className="modalSignUp-content">
         <h1>Sign Up</h1>
-        <div>Name</div>
-        <input
-          value={userName}
-          onChange={(e) => setUserName(e.target.value)}
-        />
-        <div>Home</div>
+        <div>Click your location on the map</div>
         <div id="map">
           <MapContainer center={[0, 0]} zoom={1} style={mapStyle}>
             <TileLayer
