@@ -4,11 +4,15 @@ import boto3
 import csv
 import json
 
+from datetime import datetime, timedelta
+
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('locations')
 s3 = boto3.client('s3')
 locations_table_name = 'locations'
 message_table_name = 'message'
+
+pigeon_speed = 50
 
 # Distance finder function
 def haversine(coord1, coord2):
@@ -181,12 +185,24 @@ def lambda_handler(event, context):
         locations_table = dynamodb.Table(locations_table_name)
         locations_table.put_item(Item={'message_id': message_id, 'locations': json.dumps(mapped_path)})
 
+        distance = compute_total_distance(path)
+
+        hours = timedelta(hours=distance / pigeon_speed)
+        
+        time_format = '%Y-%m-%dT%H:%M:%S'
+        
+        sent_date_parsed = datetime.strptime(sent_date, time_format)
+        
+        adjusted_time = sent_date_parsed + hours
+        
+        arrival_date =  adjusted_time.strftime(time_format)
+
         # Update the "arrivalDate" field in the "message" table
         message_table = dynamodb.Table(message_table_name)
         response = message_table.update_item(
             Key={'message_id': message_id},
             UpdateExpression='SET arrivalDate = :arrival_date',
-            ExpressionAttributeValues={':arrival_date': sent_date}
+            ExpressionAttributeValues={':arrival_date': arrival_date}
         )
         
         return {
