@@ -53,9 +53,9 @@ const MapComponent = ({ message, user }) => {
   }, [points]);
   
   const drawPoints = () => {
-    const startTime = new Date(message.sentDate).getTime();
-    const arrivalTime = new Date(message.arrivalDate).getTime();
-    const currentTime = new Date().getTime();
+    const startTime = new Date('2023-09-16T10:30:12').getTime();
+    const arrivalTime = new Date('2023-09-16T10:33:12').getTime();
+    const currentTime = new Date('2023-09-16T10:32:12').getTime();
   
     const journeyDuration = arrivalTime - startTime;
     const timeElapsed = currentTime - startTime;
