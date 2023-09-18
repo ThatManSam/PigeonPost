@@ -38,8 +38,8 @@
       zip_file: get_user.zip
     - file: create_user.py
       zip_file: create_user.zip
-    # - file: calculate_location_path.py
-    #   zip_file: calculate_location_path.zip
+    - file: calculate_location_path.py
+      zip_file: calculate_location_path.zip
   args:
     chdir: "{{ role_path }}/../../../lambdas"
 
@@ -68,9 +68,9 @@
     - name: create_user
       role: LambdaCreateUser
       zip_file: "{{ role_path }}/../../../lambdas/create_user.zip"
-    # - name: calculate_location_path
-    #   role: LambdaCalculatePath
-    #   zip_file: "{{ role_path }}/../../../lambdas/calculate_location_path.zip"
+    - name: calculate_location_path
+      role: LambdaCalculatePath
+      zip_file: "{{ role_path }}/../../../lambdas/calculate_location_path.zip"
 
 - name: Clean up zip files
   command: "rm -f {{ item.zip_file }}"
@@ -80,25 +80,25 @@
     - zip_file: get_message_locations.zip
     - zip_file: get_user.zip
     - zip_file: create_user.zip
-    # - zip_file: calculate_location_path.zip
+    - zip_file: calculate_location_path.zip
   args:
     chdir: "{{ role_path }}/../../../lambdas"
 
-- name: Create EC2 instance
-      amazon.aws.ec2_instance:
-        instance_type: t2.micro
-        image_id: ami-0c94855ba95c71c99  
-        key_name: "PigeonPostEC2"
-        count: 1
-        region: "ap-southeast-2"
-        vpc_subnet_id: "subnet-0257bc052d50a3015"
-        network:
-          assign_public_ip: yes
-        wait: yes
-        tags:
-          name: "Pigeon Post"
-      register: ec2
+# - name: Create EC2 instance
+#   amazon.aws.ec2_instance:
+#     instance_type: t2.micro
+#     image_id: ami-0c94855ba95c71c99  
+#     key_name: "PigeonPostEC2"
+#     count: 1
+#     region: "ap-southeast-2"
+#     vpc_subnet_id: "subnet-0257bc052d50a3015"
+#     network:
+#       assign_public_ip: yes
+#     wait: yes
+#     tags:
+#       name: "Pigeon Post"
+#       register: ec2
 
-    - name: Print instance details
-      debug:
-        var: ec2.instances
+# - name: Print instance details
+#   debug:
+#     var: ec2.instances
