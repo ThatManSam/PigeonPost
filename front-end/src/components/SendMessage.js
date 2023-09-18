@@ -21,7 +21,8 @@ function SendMessage({ onSendToggle,onShowMap, user }) {
         method: 'POST',
         mode: 'cors', // no-cors, *cors, same-origin
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': user.signInUserSession.idToken.jwtToken  // This is the ID token from Cognito
         },
         body: JSON.stringify({
           senderName: user.signInUserSession.idToken.payload.email,

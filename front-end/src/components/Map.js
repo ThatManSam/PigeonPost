@@ -11,7 +11,7 @@ const mapStyle = {
   position: 'absolute',
 };
 
-const MapComponent = ({ message }) => {
+const MapComponent = ({ message, user }) => {
   const [currentPosition, setCurrentPosition] = useState(null);
   const [points, setPoints] = useState([[0, 0]]);
 
@@ -28,7 +28,11 @@ const MapComponent = ({ message }) => {
   // }, [message]);
   
   useEffect(() => {
-    fetch('https://otk78wgmid.execute-api.ap-southeast-2.amazonaws.com/develop/api/message/81ff659df2e15226bffe29a517e20cc951d98b47cb342b1f183da0493d33901c/location')
+    fetch('https://otk78wgmid.execute-api.ap-southeast-2.amazonaws.com/develop/api/message/81ff659df2e15226bffe29a517e20cc951d98b47cb342b1f183da0493d33901c/location', {
+      headers: {
+        'Authorization': user.signInUserSession.idToken.jwtToken  // This is the ID token from Cognito
+      }
+    })
     .then(response => response.json())
     .then(data => {
       const transformedPoints = data.map(point => [point.latitude, point.longitude]);
