@@ -36,6 +36,7 @@ const MapComponent = ({ message, user }) => {
     })
     .then(response => response.json())
     .then(data => {
+      console.log("message id data: " + data)
       const transformedPoints = data.map(point => [point.latitude, point.longitude]);
       setPoints(transformedPoints);
         // console.log('Success:', data);

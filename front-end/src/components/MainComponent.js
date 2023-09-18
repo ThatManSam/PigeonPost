@@ -32,7 +32,7 @@ function MainComponent({ onSendToggle, onShowMap,user, onSignOut }) {
       .then(response => response.json())
       .then(data => {
         setInboxMessages(data)
-        console.log("Data from the message api: " + data)
+        // console.log("Data from the message api: " + data)
       })
       .catch(error => console.error('Error fetching data:', error));
   }, []);

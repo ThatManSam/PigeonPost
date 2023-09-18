@@ -15,10 +15,10 @@ Amplify.configure({
     oauth: {
       domain: 'pigeonpost-signin.auth.ap-southeast-2.amazoncognito.com',
       scope: ['email', 'openid', 'phone'],
-      redirectSignIn: 'https://pigeonpost.site/',
-      redirectSignOut: 'https://pigeonpost.site/',
-      // redirectSignIn: 'http://localhost:3001',
-      // redirectSignOut: 'http://localhost:3001',
+      // redirectSignIn: 'https://pigeonpost.site/',
+      // redirectSignOut: 'https://pigeonpost.site/',
+      redirectSignIn: 'http://localhost:3001',
+      redirectSignOut: 'http://localhost:3001',
       responseType: 'code', // or 'code'
       options: {
         AdvancedSecurityDataCollectionFlag: false
@@ -50,14 +50,27 @@ function App() {
   useEffect(() => {
     if (user) {
       // Run fetch request when user is logged in
-      // fetch('YOUR_API_ENDPOINT')
-      //   .then(response => response.json())
-      //   .then(data => {
-      //     setUserHasSignedUp(data); // Assume data is a boolean (true or false)
-      //   })
-      //   .catch(error => {
-      //     console.error('Error fetching data:', error);
-      //   });
+      fetch('https://otk78wgmid.execute-api.ap-southeast-2.amazonaws.com/develop/api/user', {
+        headers: {
+          'Authorization': user.signInUserSession.idToken.jwtToken  // This is the ID token from Cognito
+        }
+      })
+        .then(response => {
+          if (response.status === 200) {
+            return response.json();
+          } else if (response.status === 400) {
+            throw new Error('User does not exist');
+          } else {
+            throw new Error('Unexpected HTTP status: ' + response.status);
+          }
+        })
+        .then(data => {
+          setUserHasSignedUp(data); // Assume data is a boolean (true or false)
+        })
+        .catch(error => {
+          setUserHasSignedUp(false)
+          console.error('Error fetching data:', error);
+        });
     }
   }, [user]);
 
@@ -65,10 +78,10 @@ function App() {
   useEffect(() => {
     Auth.currentAuthenticatedUser()
       .then(user => {
-        console.log("Logged in...")
+        // console.log("Logged in...")
         setUser(user);
-        console.log(user)
-        console.log(user.signInUserSession.idToken.payload.email)
+        // console.log(user)
+        // console.log(user.signInUserSession.idToken.payload.email)
       })
       .catch(err => {
         console.log("No user signed in");
@@ -84,7 +97,7 @@ function App() {
   const toggleMapVisibility = () => {
     setIsMapVisible(!isMapVisible);
   };
-  
+
   return (
     <div className="App">
       {isMapVisible ? (
@@ -93,7 +106,7 @@ function App() {
       ) : user ? (
         userHasSignedUp === false ? (
           // Show another component if fetchResult is false
-          <ChooseLocation onSignUpOK={userSignedUp}/>
+          <ChooseLocation onSignUpOK={userSignedUp} user={user}/>
         ) : isSendVisible ? (
           // User is sending messgae
           <SendMessage 

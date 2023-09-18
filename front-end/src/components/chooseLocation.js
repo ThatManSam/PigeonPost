@@ -11,7 +11,7 @@ const mapStyle = {
   position: 'absolute',
 };
 
-const ChooseLocation = ({ onSignUpOK }) => {
+const ChooseLocation = ({ onSignUpOK, user }) => {
   const [userName, setUserName] = useState("");
   const [userLocation, setUserLocation] = useState(null);
 
@@ -27,42 +27,52 @@ const ChooseLocation = ({ onSignUpOK }) => {
     const map = useMapEvents({
       click: (e) => {
         const { lat, lng } = e.latlng;
-        setUserLocation({ lat, lng });
+        const formattedUserLocation = {
+          location: {
+            longitude: lng,
+            latitude: lat
+          }
+        };
+        setUserLocation(formattedUserLocation);
       },
     });
-
-    return userLocation === null ? null : <Marker position={userLocation} icon={customIcon}/>;
+  
+    return userLocation === null ? null : (
+      <Marker 
+        position={{ lat: userLocation.location.latitude, lng: userLocation.location.longitude }} 
+        icon={customIcon}
+      />
+    );
   };
-
+  
   const sendMessage = async () => {
     const payload = {
-      userName,
-      userLocation,
+      location: userLocation,
     };
     if(userLocation == null){
-        window.alert("Please Enter Name and Click Home Location On the Map")
+        window.alert("Please Click Home Location On the Map")
         return
     }
     console.log(payload)
-    // UNCOMMENT WHEN API POINT IS THERE. 
-    // try {
-        //   const response = await fetch('setUserNameAndLocationAPI', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-            //  'Authorization': user.signInUserSession.idToken.jwtToken,  // This is the ID token from Cognito
-    //     },
-    //     body: JSON.stringify(payload),
-    //   });
 
-    //   if (response.ok) {
-    //     onSignUpOK();
-    //   } else {
-    //     console.log('Failed to send message:', response.status);
-    //   }
-    // } catch (error) {
-    //   console.error('An error occurred:', error);
-    // }
+    // UNCOMMENT WHEN API POINT IS THERE. 
+    try {
+      const response = await fetch('https://otk78wgmid.execute-api.ap-southeast-2.amazonaws.com/develop/api/user', {
+        method: 'POST',
+        headers: {
+          'Authorization': user.signInUserSession.idToken.jwtToken,  // This is the ID token from Cognito
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        onSignUpOK();
+      } else {
+        console.log('Failed to send message:', response);
+      }
+    } catch (error) {
+      console.error('An error occurred:', error);
+    }
     onSignUpOK()
   };
 
