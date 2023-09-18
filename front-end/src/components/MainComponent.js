@@ -28,8 +28,11 @@ function MainComponent({ onSendToggle, onShowMap,user }) {
         'Authorization': user.signInUserSession.idToken.jwtToken  // This is the ID token from Cognito
       }
     })
-      .then(response => console.log("response" + response.json()))
-      .then(data => setInboxMessages(data))
+      .then(response => response.json())
+      .then(data => {
+        setInboxMessages(data)
+        console.log("Data from the message api: " + data)
+      })
       .catch(error => console.error('Error fetching data:', error));
   }, []);
 
@@ -76,7 +79,7 @@ function MainComponent({ onSendToggle, onShowMap,user }) {
               <div className="modal">
                 <div className="modal-content">
                   <div className="close-button" onClick={closeModal}>close</div>
-                  <Map message={selectedSentMessage} />
+                  <Map message={selectedSentMessage} user={user}/>
                 </div>
               </div>
             )}

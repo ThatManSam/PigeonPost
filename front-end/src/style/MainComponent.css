@@ -60,7 +60,7 @@
     padding: 5px;
     border-radius: 10px;
     margin-bottom: 10px;
-    height: 30px;
+    height: fit-content;
     align-items: center;
     display: grid;
     grid-template-columns: auto auto 1fr;
@@ -72,7 +72,7 @@
 .senderName{
     font-weight: 700;
     padding-left: 50px;
-    width: 200px;
+    width: 400px;
 }
 .receivedMail{
     flex: 1;
