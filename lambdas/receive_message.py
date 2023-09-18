@@ -7,7 +7,8 @@ import base64
 
 # Initialize DynamoDB client
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('message')
+message_table = dynamodb.Table('message')
+users_table = dynamodb.Table('users')
 sns = boto3.client('sns')
 
 def generate_message_id(sender_name, receiver_name, sent_date):
@@ -55,7 +56,7 @@ def lambda_handler(event, context):
             raise ValueError("Missing key 'receiverName' in body")
         
         # Get location of receiver and check they exist
-        receiver_user_response = table.query(
+        receiver_user_response = users_table.query(
             KeyConditionExpression='user_id = :user',
             ExpressionAttributeValues={
                 ':user': senderName
@@ -71,7 +72,7 @@ def lambda_handler(event, context):
         receive_location = json.loads(receiver_user[0]['location'])
         
         # Query messages sent by the senderName
-        sender_user_response = table.query(
+        sender_user_response = users_table.query(
             KeyConditionExpression='user_id = :user',
             ExpressionAttributeValues={
                 ':user': senderName
@@ -107,7 +108,7 @@ def lambda_handler(event, context):
                 'body': 'Error calculating path'
             }
         
-        response = table.put_item(
+        response = message_table.put_item(
             Item={
                 'message_id': message_id,
                 'senderName': senderName,
