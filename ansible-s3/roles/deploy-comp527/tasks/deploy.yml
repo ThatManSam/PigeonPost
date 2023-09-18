@@ -10,7 +10,7 @@
     name: "{{ bucket_name_dataset }}"
     state: present
     policy: "{{ lookup('file', 's3-web-access-policy.json') }}"
-    region: ap-southeast-2
+    region: "{{ aws_region }}"
     public_access:
       block_public_acls: true
       block_public_policy: true
@@ -21,9 +21,9 @@
   amazon.aws.aws_s3:
     bucket: "{{ bucket_name_dataset }}"
     object: dataset/filtered_cities.csv
-    src: "{{ role_path }}/../../../filtered_cities.csv"
+    src: "{{ role_path }}/files/filtered_cities.csv"
     mode: put
-    region: ap-southeast-2
+    region: "{{ aws_region }}"
 
 - name: Create zip files for lambda functions
   command: "zip {{ item.zip_file }} {{ item.file }}"
@@ -41,7 +41,7 @@
     - file: calculate_location_path.py
       zip_file: calculate_location_path.zip
   args:
-    chdir: "{{ role_path }}/../../../lambdas"
+    chdir: "{{ role_path }}/files"
 
 - name: Create all the lambda functions
   amazon.aws.lambda:
@@ -55,22 +55,22 @@
   loop:
     - name: get_messages
       role: LambdaGetMessages
-      zip_file: "{{ role_path }}/../../../lambdas/get_messages.zip"
+      zip_file: "{{ role_path }}/files/get_messages.zip"
     - name: receive_message
       role: LambdaReceiveMessage
-      zip_file: "{{ role_path }}/../../../lambdas/receive_message.zip"
+      zip_file: "{{ role_path }}/files/receive_message.zip"
     - name: get_message_locations
       role: LambdaGetLocations
-      zip_file: "{{ role_path }}/../../../lambdas/get_message_locations.zip"
+      zip_file: "{{ role_path }}/files/get_message_locations.zip"
     - name: get_user
       role: LambdaGetUser
-      zip_file: "{{ role_path }}/../../../lambdas/get_user.zip"
+      zip_file: "{{ role_path }}/files/get_user.zip"
     - name: create_user
       role: LambdaCreateUser
-      zip_file: "{{ role_path }}/../../../lambdas/create_user.zip"
+      zip_file: "{{ role_path }}/files/create_user.zip"
     - name: calculate_location_path
       role: LambdaCalculatePath
-      zip_file: "{{ role_path }}/../../../lambdas/calculate_location_path.zip"
+      zip_file: "{{ role_path }}/files/calculate_location_path.zip"
 
 - name: Clean up zip files
   command: "rm -f {{ item.zip_file }}"
@@ -82,23 +82,11 @@
     - zip_file: create_user.zip
     - zip_file: calculate_location_path.zip
   args:
-    chdir: "{{ role_path }}/../../../lambdas"
+    chdir: "{{ role_path }}/files"
 
-# - name: Create EC2 instance
-#   amazon.aws.ec2_instance:
-#     instance_type: t2.micro
-#     image_id: ami-0c94855ba95c71c99  
-#     key_name: "PigeonPostEC2"
-#     count: 1
-#     region: "ap-southeast-2"
-#     vpc_subnet_id: "subnet-0257bc052d50a3015"
-#     network:
-#       assign_public_ip: yes
-#     wait: yes
-#     tags:
-#       name: "Pigeon Post"
-#       register: ec2
-
-# - name: Print instance details
-#   debug:
-#     var: ec2.instances
+- name: Start EC2 instance
+  amazon.aws.ec2_instance:
+    instance_ids:
+      - i-06ba54a42010b14a0
+    region: "{{ aws_region }}"
+    state: running

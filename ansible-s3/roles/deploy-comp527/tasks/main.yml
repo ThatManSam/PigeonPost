@@ -1,0 +1,19 @@
+---
+- name: Create Bucket, Lambdas and Start EC2 instances
+  include_tasks:
+    file: deploy.yml
+    apply:
+      tags:
+        - deploy
+  tags:
+    - deploy
+
+- name: Shutdown EC2 instances
+  include_tasks:
+    file: shutdown.yml
+    apply:
+      tags:
+        - shutdown
+  tags:
+    - shutdown
+

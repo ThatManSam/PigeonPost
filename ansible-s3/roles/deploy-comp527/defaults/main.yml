@@ -1,3 +1,4 @@
 ---
 # Change these to suit your environment
 bucket_name_dataset: pigeon-post-data-sets
+aws_region: ap-southeast-2

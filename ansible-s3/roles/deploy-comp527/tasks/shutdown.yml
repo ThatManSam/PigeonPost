@@ -1,0 +1,8 @@
+---
+
+- name: Stop EC2 instances
+  amazon.aws.ec2_instance:
+    state: stopped
+    instance_ids:
+      - "i-06ba54a42010b14a0"
+    region: "{{ aws_region }}"
