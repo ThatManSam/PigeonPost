@@ -34,7 +34,7 @@ const currentConfig = Auth.configure();
 function App() {
   const [isSendVisible, setIsSentVisible] = useState(false)
   const [isMapVisible, setIsMapVisible] = useState(false);
-  const [userHasSignedUp, setUserHasSignedUp] = useState(false); // New state variable
+  const [userHasSignedUp, setUserHasSignedUp] = useState(true); // New state variable
 
   const [user, setUser] = useState(null)
 

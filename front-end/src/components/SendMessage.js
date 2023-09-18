@@ -25,7 +25,6 @@ function SendMessage({ onSendToggle,onShowMap, user }) {
         body: JSON.stringify({
           // senderName: user.signInUserSession.idToken.payload.email,
           receiverName: receiverName,
-          sentPigeon: "Pigeon123",
           message: message
         })
       })
