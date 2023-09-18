@@ -97,13 +97,17 @@ function App() {
         ) : isSendVisible ? (
           // User is sending messgae
           <SendMessage 
-            onSendToggle={() => setIsSentVisible(!isSendVisible)} 
+            onSendToggle={() => {
+              setIsSentVisible(!isSendVisible)
+              window.alert("Message Sent!") 
+            }} 
             onShowMap={toggleMapVisibility} 
             user={user}
           />
         ) : (
           // this is the 'home' screen
           <MainComponent 
+            onSignOut={signOut}
             onSendToggle={() => setIsSentVisible(!isSendVisible)} 
             onShowMap={toggleMapVisibility} 
             user={user}

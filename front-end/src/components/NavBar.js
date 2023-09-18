@@ -2,7 +2,7 @@
 import React from 'react';
 import '../style/NavBar.css';
 
-const Navbar = ({onShowMap}) => {
+const Navbar = ({onShowMap, onSignOut, isLandingPage}) => {
     return (
         <div className="navbar">
             <div id='navBarTitle'>
@@ -10,9 +10,9 @@ const Navbar = ({onShowMap}) => {
                 </div>
                 <a href="/">Pigeon Post</a>
             </div>
-            {/* <div id='navBarRightSide'>
-                <button onClick={onShowMap}id='navBarViewMapButton'>View Map</button>
-            </div> */}
+            <div id='navBarRightSide'>
+                { !isLandingPage && <button onClick={onSignOut}id='navBarViewMapButton'>Sign Out</button> }
+            </div>
         </div>
     );
 }

@@ -3,8 +3,9 @@ import NavBar from './NavBar';
 import '../style/MainComponent.css';
 import New from '../Images/edit.png'
 import Map from '../components/Map'
+const isLandingPage = false
 
-function MainComponent({ onSendToggle, onShowMap,user }) {
+function MainComponent({ onSendToggle, onShowMap,user, onSignOut }) {
 
   const [inboxSent, setInboxSent] = useState("Inbox")
   const [inboxMessages, setInboxMessages] = useState({ sent_messages: [], received_messages: [] });
@@ -55,7 +56,7 @@ function MainComponent({ onSendToggle, onShowMap,user }) {
   
   return (
     <div id='mainComponantBox'>
-      <NavBar onShowMap={onShowMap}/>
+      <NavBar onShowMap={onShowMap} onSignOut={onSignOut} isLandingPage={isLandingPage}/>
       <div id='mainComponantContainer'>
         <div>
           <h1>Welcome, <span id='userName'>{user.signInUserSession.idToken.payload.email}</span></h1>

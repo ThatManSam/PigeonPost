@@ -19,9 +19,7 @@ function SendMessage({ onSendToggle,onShowMap, user }) {
       }
       fetch('https://otk78wgmid.execute-api.ap-southeast-2.amazonaws.com/develop/api/message', {
         method: 'POST',
-        mode: 'cors', // no-cors, *cors, same-origin
         headers: {
-          'Content-Type': 'application/json',
           'Authorization': user.signInUserSession.idToken.jwtToken  // This is the ID token from Cognito
         },
         body: JSON.stringify({
@@ -39,7 +37,7 @@ function SendMessage({ onSendToggle,onShowMap, user }) {
     
   return (
     <div id='SendMessageBox'>
-        <NavBar onShowMap={onShowMap}/>
+        <NavBar onShowMap={onShowMap} />
         <div id='SendMessageContainer'>
         {/* {
             hasChosenBird ? */}

@@ -4,6 +4,8 @@ import NavBar from './NavBar';
 import Pigeon from '../Images/landingPagePigeon.png';
 import CheckMark from '../Images/landingPageCheckmark.png';
 
+const isLandingPage = true
+
 const LandingPage = ({ onLoginSuccess, onShowMap }) => {
   const [textIndex, setTextIndex] = useState(0);
   const [wordIndex, setWordIndex] = useState(0);
@@ -43,7 +45,7 @@ const LandingPage = ({ onLoginSuccess, onShowMap }) => {
 
   return (
     <div id="landingPageBox">
-      <NavBar onShowMap={onShowMap}/>
+      <NavBar onShowMap={onShowMap} isLandingPage={isLandingPage}/>
       <div id="landingPageContainer">
         <div id="landingPageLeft">
           <h1>Where Every Message Is A<br/> <div id='typewriter'>{words[wordIndex].substring(0, textIndex)}<span className="blinking-cursor">|</span></div> <br/>Not Just a Send.</h1>
