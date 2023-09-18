@@ -1,0 +1,14 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowPutItemToUsersTable",
+            "Effect": "Allow",
+            "Action": "dynamodb:PutItem",
+            "Resource": [
+                "arn:aws:dynamodb:*:149774945632:table/users",
+                "arn:aws:dynamodb:*:149774945632:table/users/*"
+            ]
+        }
+    ]
+}
