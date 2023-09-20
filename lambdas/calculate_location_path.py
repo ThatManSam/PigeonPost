@@ -135,10 +135,11 @@ def find_point_on_path(path, percentage):
 
 def lambda_handler(event, context):
     sqs_message = json.loads(event['Records'][0]['body'])
-    message_id = sqs_message['message_id']
-    send_location = sqs_message['send_location']
-    receive_location = sqs_message['receive_location']
-    sent_date = sqs_message['sent_date']
+    message = json.loads(sqs_message['Message'])
+    message_id = message['message_id']
+    send_location = message['send_location']['location']
+    receive_location = message['receive_location']['location']
+    sent_date = message['sent_date']
     
     try:
         # Specify the S3 bucket name and the object (file) key
@@ -164,7 +165,6 @@ def lambda_handler(event, context):
                 lat = float(row['lat'])
                 lng = float(row['lng'])
                 cities[city_ascii] = (lat, lng)
-        
         start = (send_location['latitude'], send_location['longitude'])
         end = (receive_location['latitude'], receive_location['longitude'])
         

@@ -86,7 +86,7 @@ def lambda_handler(event, context):
             return {
                 'statusCode': 200,
                 'headers': headers,
-                'body': json.dumps(matching_locations[0]['locations'])
+                'body': matching_locations[0]['locations']
             }
         else:
             return {

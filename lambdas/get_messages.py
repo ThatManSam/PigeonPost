@@ -1,6 +1,7 @@
 import json
 import boto3
 import base64
+from datetime import datetime
 
 # Initialize DynamoDB client
 dynamodb = boto3.resource('dynamodb')
@@ -52,10 +53,17 @@ def lambda_handler(event, context):
         sent_messages = sent_messages_response.get('Items', [])
         received_messages = received_messages_response.get('Items', [])
 
+        time_format = '%Y-%m-%dT%H:%M:%S'
+        allowed_received_messages = []
+        for message in received_messages:
+            arrival_date = datetime.strptime(message['arrivalDate'], time_format)
+            if arrival_date < datetime.now():
+                allowed_received_messages.append(message)
+
         # Combine and return the results
         result = {
             'sent_messages': sent_messages,
-            'received_messages': received_messages
+            'received_messages': allowed_received_messages
         }
 
         return {

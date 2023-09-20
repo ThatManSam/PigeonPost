@@ -59,7 +59,7 @@ def lambda_handler(event, context):
         receiver_user_response = users_table.query(
             KeyConditionExpression='user_id = :user',
             ExpressionAttributeValues={
-                ':user': senderName
+                ':user': receiverName
             }
         )
         receiver_user = receiver_user_response.get('Items', [])
