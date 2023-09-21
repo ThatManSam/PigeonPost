@@ -17,6 +17,33 @@ function SendMessage({ onSendToggle,onShowMap, user }) {
         window.alert("Please enter a recipient and a message");
         return;
       }
+      // fetch('https://otk78wgmid.execute-api.ap-southeast-2.amazonaws.com/develop/api/message', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Authorization': user.signInUserSession.idToken.jwtToken  // This is the ID token from Cognito
+      //   },
+      //   body: JSON.stringify({
+      //     // senderName: user.signInUserSession.idToken.payload.email,
+      //     receiverName: receiverName,
+      //     message: message
+      //   })
+      // })
+      // .then(response => {
+      //   if (response.status === 400) {
+      //     window.alert('Bad request, could not send message.');
+      //     throw new Error('Bad request');  // This will skip the following 'then' and go straight to 'catch'
+      //   }
+      //   return response.json();
+      // })
+      // .then(data => {
+      //   console.log('Success:', data);
+      //   window.alert("Message Sent!");
+      //   onSendToggle();
+      // })
+      // .catch((error) => {
+      //   console.error('Error:', error);
+      //   // Note: If you throw an error in the above 'then', it will be caught here
+      // });
       fetch('https://otk78wgmid.execute-api.ap-southeast-2.amazonaws.com/develop/api/message', {
         method: 'POST',
         headers: {
@@ -29,21 +56,41 @@ function SendMessage({ onSendToggle,onShowMap, user }) {
         })
       })
       .then(response => {
-        if (response.status === 400) {
-          window.alert('Bad request, could not send message.');
-          throw new Error('Bad request');  // This will skip the following 'then' and go straight to 'catch'
-        }
-        return response.json();
+        return response.text()  // Use text() instead of json() to handle all kinds of responses
       })
-      .then(data => {
-        console.log('Success:', data);
-        window.alert("Message Sent!");
-        onSendToggle();
+      .then(text => {
+        try {
+          // Try parsing it as JSON
+          const data = JSON.parse(text);
+          console.log('Response Body:', data);
+      
+          // Check for the specific message "Recipient does not exist"
+          if (data === 'Recipient does not exist') {
+            window.alert('Recipient does not exist. Please check the recipient email.');
+            // Return the user to a specific location or state
+            // Example: window.location.href = '/some-page';
+            return;
+          }
+      
+          if (data.status === 400) {
+            window.alert('Bad request, could not send message.');
+            throw new Error('Bad request');  // This will skip the following 'then' and go straight to 'catch'
+          }
+      
+          console.log('Success:', data);
+          window.alert("Message Sent!");
+          onSendToggle();
+        } catch (error) {
+          // If parsing fails, it should still print the original text response
+          console.log('Response Body:', text);
+          throw new Error('Failed to parse JSON');
+        }
       })
       .catch((error) => {
         console.error('Error:', error);
         // Note: If you throw an error in the above 'then', it will be caught here
       });
+                  
     };
         
   return (
