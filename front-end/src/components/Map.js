@@ -56,9 +56,6 @@ const MapComponent = ({ message, user }) => {
     const startTime = new Date(message.sentDate).getTime();
     const arrivalTime = new Date(message.arrivalDate).getTime();
     const currentTime = new Date().getTime();
-    if(arrivalTime == 0){
-      window.alert("Pigeon is currently being sent out. Check back in 5 mins to see their route.")
-    }
     console.log(startTime + " arrivaltime: " +  arrivalTime + " current: " +  currentTime)
   
     const journeyDuration = arrivalTime - startTime;

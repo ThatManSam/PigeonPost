@@ -63,6 +63,11 @@ function MainComponent({ onSendToggle, onShowMap,user, onSignOut }) {
     })
     .catch(error => console.error('Network error:', error));
   }, []);
+  useEffect(() => {
+    if (showMapModal && new Date(selectedSentMessage.arrivalDate).getTime() === 0) {
+      window.alert("Pigeon has just been sent, please check back in 5mins to see the route");
+    }
+  }, [showMapModal, selectedSentMessage]);
   
   function formatDate(dateStr) {
     const dateObj = new Date(dateStr);
@@ -103,14 +108,26 @@ function MainComponent({ onSendToggle, onShowMap,user, onSignOut }) {
             </button>
           </div>
           <div>
-            {showMapModal && (
+            {/* {showMapModal && (new Date(selectedSentMessage.arrivalDate).getTime() != 0)(
+              <div className="modal">
+                <div className="modal-content">
+                  <div className="close-button" onClick={closeModal}>close</div>
+                  <Map message={selectedSentMessage} user={user}/>
+                  
+                </div>
+              </div>
+            )} */}
+            {
+            showMapModal && new Date(selectedSentMessage.arrivalDate).getTime() !== 0 ? (
               <div className="modal">
                 <div className="modal-content">
                   <div className="close-button" onClick={closeModal}>close</div>
                   <Map message={selectedSentMessage} user={user}/>
                 </div>
               </div>
-            )}
+            ) : null
+          }
+
           </div>
 
           <div id='mainComponentDisplay'>
