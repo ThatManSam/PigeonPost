@@ -23,20 +23,47 @@ function MainComponent({ onSendToggle, onShowMap,user, onSignOut }) {
     setShowMapModal(true);
   }
   
+  // useEffect(() => {
+  //   fetch('https://otk78wgmid.execute-api.ap-southeast-2.amazonaws.com/develop/api/message', {
+  //     headers: {
+  //       'Authorization': user.signInUserSession.idToken.jwtToken  // This is the ID token from Cognito
+  //     }
+  //   })
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       setInboxMessages(data)
+  //       // console.log("Data from the message api: " + data)
+  //     })
+  //     .catch(error => console.error('Error fetching data:', error));
+  // }, []);
   useEffect(() => {
     fetch('https://otk78wgmid.execute-api.ap-southeast-2.amazonaws.com/develop/api/message', {
       headers: {
         'Authorization': user.signInUserSession.idToken.jwtToken  // This is the ID token from Cognito
       }
     })
-      .then(response => response.json())
-      .then(data => {
-        setInboxMessages(data)
-        // console.log("Data from the message api: " + data)
-      })
-      .catch(error => console.error('Error fetching data:', error));
+    .then(response => {
+      return response.text()  // Get the response body as text
+        .then(text => {
+          try {
+            return JSON.parse(text);  // Try to parse it as JSON
+          } catch (error) {
+            return text;  // If not JSON, return as is
+          }
+        })
+        .then(data => {
+          console.log('Data from the message API:', data);  // Log the parsed data
+          console.log("jwt: " + user.signInUserSession.idToken.jwtToken)
+          if (response.ok) {  // If the response was successful, proceed
+            setInboxMessages(data);
+          } else {
+            console.error('Error status:', response.status);
+          }
+        });
+    })
+    .catch(error => console.error('Network error:', error));
   }, []);
-
+  
   function formatDate(dateStr) {
     const dateObj = new Date(dateStr);
     const day = dateObj.getDate();
@@ -108,7 +135,7 @@ function MainComponent({ onSendToggle, onShowMap,user, onSignOut }) {
                   <div key={msg.message_id} className='receivedMail'>
                     <span className='senderName'>{msg.senderName}</span>
                     <span className='senderMessage'>{msg.message}</span>
-                    <span className='senderDate'>{formatDate(msg.sentDate)}</span>
+                    <span className='senderDate'>{formatDate(msg.arrivalDate)}</span>
                   </div>
                 ))
               )}
