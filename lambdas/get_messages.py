@@ -56,9 +56,10 @@ def lambda_handler(event, context):
         time_format = '%Y-%m-%dT%H:%M:%S'
         allowed_received_messages = []
         for message in received_messages:
-            arrival_date = datetime.strptime(message['arrivalDate'], time_format)
-            if arrival_date < datetime.now():
-                allowed_received_messages.append(message)
+            if message['arrivalDate'] is not None:
+                arrival_date = datetime.strptime(message['arrivalDate'], time_format)
+                if arrival_date < datetime.now():
+                    allowed_received_messages.append(message)
 
         # Combine and return the results
         result = {
